@@ -7,12 +7,12 @@ import (
 	"net"
 	"time"
 
-	"github.com/denghongcai/MessageHive/modules/auth"
-	"github.com/denghongcai/MessageHive/modules/log"
-	"github.com/denghongcai/MessageHive/modules/message"
-	"github.com/denghongcai/MessageHive/modules/onlinetable"
-	"github.com/denghongcai/MessageHive/modules/protocol"
-	"github.com/denghongcai/MessageHive/modules/router"
+	"github.com/Snipergzf/MessageHive/modules/auth"
+	"github.com/Snipergzf/MessageHive/modules/log"
+	"github.com/Snipergzf/MessageHive/modules/message"
+	"github.com/Snipergzf/MessageHive/modules/onlinetable"
+	"github.com/Snipergzf/MessageHive/modules/protocol"
+	"github.com/Snipergzf/MessageHive/modules/router"
 	"github.com/golang/protobuf/proto"
 )
 

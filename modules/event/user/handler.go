@@ -2,8 +2,8 @@
 package user
 
 import (
-	"github.com/denghongcai/MessageHive/modules/message"
-	"github.com/denghongcai/MessageHive/modules/onlinetable"
+	"github.com/Snipergzf/MessageHive/modules/message"
+	"github.com/Snipergzf/MessageHive/modules/onlinetable"
 	"github.com/garyburd/redigo/redis"
 	"github.com/golang/protobuf/proto"
 	"time"

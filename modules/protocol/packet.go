@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/denghongcai/MessageHive/modules/message"
+	"github.com/Snipergzf/MessageHive/modules/message"
 	"github.com/golang/protobuf/proto"
 	"github.com/op/go-logging"
 )

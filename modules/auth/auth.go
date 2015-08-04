@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/denghongcai/MessageHive/modules/log"
-	"github.com/denghongcai/MessageHive/modules/message"
+	"github.com/Snipergzf/MessageHive/modules/log"
+	"github.com/Snipergzf/MessageHive/modules/message"
 	_ "github.com/go-sql-driver/mysql"
 )
 

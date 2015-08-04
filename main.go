@@ -4,7 +4,7 @@ package main
 import (
 	"runtime"
 
-	"github.com/denghongcai/MessageHive/modules/command"
+	"github.com/Snipergzf/MessageHive/modules/command"
 )
 
 func main() {

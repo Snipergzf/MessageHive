@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	event_user "github.com/denghongcai/MessageHive/modules/event/user"
-	"github.com/denghongcai/MessageHive/modules/message"
-	"github.com/denghongcai/MessageHive/modules/onlinetable"
-	"github.com/denghongcai/MessageHive/modules/queue/redis"
-	"github.com/denghongcai/MessageHive/modules/router/transient"
+	event_user "github.com/Snipergzf/MessageHive/modules/event/user"
+	"github.com/Snipergzf/MessageHive/modules/message"
+	"github.com/Snipergzf/MessageHive/modules/onlinetable"
+	"github.com/Snipergzf/MessageHive/modules/queue/redis"
+	"github.com/Snipergzf/MessageHive/modules/router/transient"
 	"github.com/golang/protobuf/proto"
 	"github.com/op/go-logging"
 )

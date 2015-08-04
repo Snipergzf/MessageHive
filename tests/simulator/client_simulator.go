@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/denghongcai/MessageHive/modules/protocol"
+	"github.com/Snipergzf/MessageHive/modules/protocol"
 )
 
 var controller = make(chan bool)

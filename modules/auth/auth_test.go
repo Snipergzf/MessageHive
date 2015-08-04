@@ -3,7 +3,7 @@ package auth
 import (
 	"testing"
 
-	"github.com/denghongcai/MessageHive/modules/message"
+	"github.com/Snipergzf/MessageHive/modules/message"
 	"github.com/golang/protobuf/proto"
 )
 
