@@ -93,7 +93,6 @@ func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []s
 			entity.List = append(entity.List, updatelist...)
 			ct.Unlock()
 			log.Debug("Group entity update: %d added", len(updatelist))
-			return nil
 		}
 		break
 	case DEL_GROUP_MEMBER:
@@ -108,10 +107,10 @@ func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []s
 			entity.List = append(entity.List[:DeleteFlag], entity.List[DeleteFlag:]...)
 			ct.Unlock()
 			log.Debug("Group entity update: %s delete", updatelist[0])
-			return nil
 		}
 		break
 	}
+	return nil
 }
 
 func (ct *Container) GetEntities() error {
