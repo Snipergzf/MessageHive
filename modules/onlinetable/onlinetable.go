@@ -5,7 +5,7 @@ import (
 	"errors"
 	"sync"
 	"time"
-
+	"strings"
 	"github.com/Snipergzf/MessageHive/modules/message"
 	"github.com/op/go-logging"
 )
@@ -17,6 +17,11 @@ const (
 	ENTITY_TYPE_USER = iota
 	ENTITY_TYPE_GROUP
 )
+//群成员操作类型定义
+const {
+	ADD_GROUP_MEMBER = "add"
+	DEL_GROUP_MEMBER = "delete"
+}
 
 // 实体结构
 type Entity struct {
@@ -76,6 +81,34 @@ func (ct *Container) AddGroupEntity(uid string, uidlist []string) error {
 	ct.Unlock()
 	log.Debug("Group entity uid: %s added", uid)
 	return nil
+}
+//更新在线表中的群组实体的成员
+func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []string) error {
+	switch action {
+	case ADD_GROUP_MEMBER:
+		ct.Lock()
+		if entity, ok := ct.storage[uid]; ok {
+			entity.List = append(entity.List,updatelist)
+			ct.Unlock()
+			log.Debug("Group entity update: %d added", len(updatelist))
+			return nil
+		}
+		break
+	case DEL_GROUP_MEMBER:
+		ct.Lock()
+		var DeleteFlag int
+		if entity, ok := ct.storage[uid]; ok {
+			for i := 0; i <= len(entity.List); i++ {
+				if strings.EqualFold(entity.List[i],updatelist[0])
+				DeleteFlag = i
+			}
+			entity.List = append(entity.List[:DeleteFlag],entity.List[DeleteFlag:])
+			ct.Unlock()
+			log.Debug("Group entity update: %s delete", updatelist[0])
+			return nil
+		}
+		break
+	}
 }
 
 func (ct *Container) GetEntities() error {

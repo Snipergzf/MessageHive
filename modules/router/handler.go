@@ -108,6 +108,7 @@ func Handler(config Config) error {
 		case msg := <-config.mainchan:
 			sendflag := true
 			sendResponseFlag := true
+			sendResToGrpFlag := false
 			sid := msg.GetSID()
 			rid := msg.GetRID()
 			mtype := msg.GetTYPE()
@@ -166,6 +167,7 @@ func Handler(config Config) error {
 								}
 							}
 							sendflag = false
+							sendResToGrpFlag = true
 							// TODO
 							break
 						case MESSAGE_GROUP_SEND:
@@ -173,6 +175,7 @@ func Handler(config Config) error {
 							break
 						case MESSAGE_GROUP_INVITE:
 							// TODO
+
 							break
 						case MESSAGE_GROUP_LEAVE:
 							// TODO
@@ -182,6 +185,12 @@ func Handler(config Config) error {
 					}
 				}
 			}
+
+			//若为群组消息，改response的BODY
+			if sendResToGrpFlag {
+				response.BODY = proto.String(`{"action":"join","data":"succeed"}`)
+			}
+
 			// 发送回应消息
 			go func(flag bool) {
 				if sendResponseFlag {
