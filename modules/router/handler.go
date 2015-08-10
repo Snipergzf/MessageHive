@@ -38,6 +38,11 @@ const (
 	MESSAGE_GROUP_SEND   = "send"
 	MESSAGE_GROUP_LEAVE  = "leave"
 )
+//群成员操作类型定义
+const {
+	ADD_GROUP_MEMBER = "add"
+	DEL_GROUP_MEMBER = "delete"
+}
 
 // 群组消息内容结构
 type GroupBody struct {
@@ -109,6 +114,7 @@ func Handler(config Config) error {
 			sendflag := true
 			sendResponseFlag := true
 			sendResToGrpFlag := false
+			InviteToGrpFlag := false
 			sid := msg.GetSID()
 			rid := msg.GetRID()
 			mtype := msg.GetTYPE()
@@ -175,7 +181,11 @@ func Handler(config Config) error {
 							break
 						case MESSAGE_GROUP_INVITE:
 							// TODO
-
+							err = config.onlinetable.UpdateGroupEntity(rid, ADD_GROUP_MEMBER, groupbody.List)
+							if err != nil {
+								log.Error(err.Error())
+							}
+							InviteToGrpFlag = true
 							break
 						case MESSAGE_GROUP_LEAVE:
 							// TODO
@@ -190,7 +200,11 @@ func Handler(config Config) error {
 			if sendResToGrpFlag {
 				response.BODY = proto.String(`{"action":"join","data":"succeed"}`)
 			}
-
+				
+			if InviteToGrpFlag {
+				response.BODY = proto.String(`{"action":"invite","data":"succeed"}`)
+			}
+						
 			// 发送回应消息
 			go func(flag bool) {
 				if sendResponseFlag {
