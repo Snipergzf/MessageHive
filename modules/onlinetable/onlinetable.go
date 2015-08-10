@@ -90,7 +90,7 @@ func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []s
 	case ADD_GROUP_MEMBER:
 		ct.Lock()
 		if entity, ok := ct.storage[uid]; ok {
-			entity.List = append(entity.List, updatelist)
+			entity.List = append(entity.List, updatelist...)
 			ct.Unlock()
 			log.Debug("Group entity update: %d added", len(updatelist))
 			return nil
@@ -105,7 +105,7 @@ func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []s
 					DeleteFlag = i
 				}
 			}
-			entity.List = append(entity.List[:DeleteFlag], entity.List[DeleteFlag:])
+			entity.List = append(entity.List[:DeleteFlag], entity.List[DeleteFlag:]...)
 			ct.Unlock()
 			log.Debug("Group entity update: %s delete", updatelist[0])
 			return nil
