@@ -18,10 +18,10 @@ const (
 	ENTITY_TYPE_GROUP
 )
 //群成员操作类型定义
-const {
+const (
 	ADD_GROUP_MEMBER = "add"
 	DEL_GROUP_MEMBER = "delete"
-}
+)
 
 // 实体结构
 type Entity struct {

@@ -38,11 +38,12 @@ const (
 	MESSAGE_GROUP_SEND   = "send"
 	MESSAGE_GROUP_LEAVE  = "leave"
 )
+
 //群成员操作类型定义
-const {
+const (
 	ADD_GROUP_MEMBER = "add"
 	DEL_GROUP_MEMBER = "delete"
-}
+)
 
 // 群组消息内容结构
 type GroupBody struct {
@@ -200,11 +201,11 @@ func Handler(config Config) error {
 			if sendResToGrpFlag {
 				response.BODY = proto.String(`{"action":"join","data":"succeed"}`)
 			}
-				
+
 			if InviteToGrpFlag {
 				response.BODY = proto.String(`{"action":"invite","data":"succeed"}`)
 			}
-						
+
 			// 发送回应消息
 			go func(flag bool) {
 				if sendResponseFlag {
