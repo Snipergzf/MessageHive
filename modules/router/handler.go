@@ -197,7 +197,7 @@ func Handler(config Config) error {
 				}
 			}
 			// 发送回应消息
-			go func(flag bool) {
+			go func(flag1 bool, falg2 bool, flag3 bool) {
 				//若为群组消息，改response的BODY
 				if sendResToGrpFlag {
 					response.BODY = proto.String(`{"action":"join","data":"succeed"}`)
@@ -213,7 +213,7 @@ func Handler(config Config) error {
 						log.Error("Response failed to deliverd to %s", sid)
 					}
 				}
-			}(sendResponseFlag)
+			}(sendResToGrpFlag,InviteToGrpFlag,sendResponseFlag)
 
 			// Send to rid
 			if sendflag {
