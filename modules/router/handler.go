@@ -186,6 +186,7 @@ func Handler(config Config) error {
 							if err != nil {
 								log.Error(err.Error())
 							}
+							sendflag = false
 							InviteToGrpFlag = true
 							break
 						case MESSAGE_GROUP_LEAVE:
@@ -213,7 +214,7 @@ func Handler(config Config) error {
 						log.Error("Response failed to deliverd to %s", sid)
 					}
 				}
-			}(sendResToGrpFlag,InviteToGrpFlag,sendResponseFlag)
+			}(sendResToGrpFlag, InviteToGrpFlag, sendResponseFlag)
 
 			// Send to rid
 			if sendflag {
