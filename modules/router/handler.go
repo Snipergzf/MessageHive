@@ -196,18 +196,15 @@ func Handler(config Config) error {
 					}
 				}
 			}
-
-			//若为群组消息，改response的BODY
-			if sendResToGrpFlag {
-				response.BODY = proto.String(`{"action":"join","data":"succeed"}`)
-			}
-
-			if InviteToGrpFlag {
-				response.BODY = proto.String(`{"action":"invite","data":"succeed"}`)
-			}
-
 			// 发送回应消息
 			go func(flag bool) {
+				//若为群组消息，改response的BODY
+				if sendResToGrpFlag {
+					response.BODY = proto.String(`{"action":"join","data":"succeed"}`)
+				}
+				if InviteToGrpFlag {
+					response.BODY = proto.String(`{"action":"invite","data":"succeed"}`)
+				}
 				if sendResponseFlag {
 					select {
 					case sentity.Pipe <- response:

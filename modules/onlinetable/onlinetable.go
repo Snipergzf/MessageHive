@@ -93,6 +93,7 @@ func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []s
 			entity.List = append(entity.List, updatelist...)
 			ct.Unlock()
 			log.Debug("Group entity update: %d added", len(updatelist))
+			log.Debug("Group entity update: %d member now", len(entity.List))
 		}
 		break
 	case DEL_GROUP_MEMBER:
