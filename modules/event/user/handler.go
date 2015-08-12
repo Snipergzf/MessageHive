@@ -5,10 +5,10 @@ import (
 	"github.com/Snipergzf/MessageHive/modules/message"
 	"github.com/Snipergzf/MessageHive/modules/onlinetable"
 	"github.com/garyburd/redigo/redis"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang/protobuf/proto"
-	"github.com/op/go-logging"
 	"time"
+
+	"github.com/op/go-logging"
 )
 
 var log = logging.MustGetLogger("main")
@@ -70,26 +70,6 @@ func Start(config Config) {
 				msg.STIME = proto.Int64(time.Now().UnixNano())
 				msg.BODY = proto.String(`{"type": "online", "data": null}`)
 				config.mainchan <- msg
-				db, err := sql.Open("mysql", "dhc:denghc@/Register")
-				if err != nil {
-					return err
-				}
-				defer db.Close()
-
-				err = db.Ping()
-				if err != nil {
-					return err
-				}
-				stmtIns, err := db.Prepare("INSERT INTO OnlineUser (id,uid,onlinetime) VALUES (null,?,null)")
-				if err != nil {
-					return err
-				}
-				defer stmtIns.Close()
-
-				_, err = stmtIns.Exec(e.Uid)
-				if err != nil {
-					return err
-				}
 			}
 			log.Debug("UID: %s online", e.Uid)
 			break
@@ -102,26 +82,6 @@ func Start(config Config) {
 				msg.STIME = proto.Int64(time.Now().UnixNano())
 				msg.BODY = proto.String(`{"type": "offline", "data": null}`)
 				config.mainchan <- msg
-				db, err := sql.Open("mysql", "dhc:denghc@/Register")
-				if err != nil {
-					return err
-				}
-				defer db.Close()
-
-				err = db.Ping()
-				if err != nil {
-					return err
-				}
-				stmt, err := db.Prepare("DELETE FROM OnlineUser WHERE uid= ?")
-				if err != nil {
-					return err
-				}
-				defer stmt.Close()
-
-				_, err = stmt.Exec(e.Uid)
-				if err != nil {
-					return err
-				}
 			}
 			log.Debug("UID: %s offline", e.Uid)
 			break
