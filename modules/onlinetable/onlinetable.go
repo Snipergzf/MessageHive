@@ -2,8 +2,10 @@
 package onlinetable
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/Snipergzf/MessageHive/modules/message"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/op/go-logging"
 	"strings"
 	"sync"
@@ -79,6 +81,27 @@ func (ct *Container) AddGroupEntity(uid string, uidlist []string) error {
 	ct.Lock()
 	entity := &Entity{Uid: uid, Type: ENTITY_TYPE_GROUP, List: uidlist, LoginTime: time.Now().UTC()}
 	ct.storage[uid] = entity
+	str := strings.Join(uidlist, ";")
+	db, err := sql.Open("mysql", "dhc:denghc@/Register")
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		return err
+	}
+	stmtIns, err := db.Prepare("INSERT INTO groups (id,group_id,group_member) VALUES (null,?,?)")
+	if err != nil {
+		return err
+	}
+	defer stmtIns.Close()
+
+	_, err = stmtIns.Exec(uid, str)
+	if err != nil {
+		return err
+	}
 	ct.Unlock()
 	log.Debug("Group entity uid: %s added", uid)
 	return nil
@@ -91,7 +114,28 @@ func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []s
 		ct.Lock()
 		if entity, ok := ct.storage[uid]; ok {
 			entity.List = append(entity.List, updatelist...)
-			ct.Unlock()
+			str := strings.Join(entity.List, ";")
+			db, err := sql.Open("mysql", "dhc:denghc@/Register")
+			if err != nil {
+				return err
+			}
+			defer db.Close()
+
+			err = db.Ping()
+			if err != nil {
+				return err
+			}
+			stmtIns, err := db.Prepare("UPDATE groups SET group_member = ? where group_id = ?")
+			if err != nil {
+				return err
+			}
+			defer stmtIns.Close()
+
+			_, err = stmtIns.Exec(str, uid)
+			if err != nil {
+				return err
+			}
+			//ct.Unlock()
 			log.Debug("Group entity update: %d added", len(updatelist))
 			log.Debug("Group entity update: %d member now", len(entity.List))
 		}
@@ -106,11 +150,12 @@ func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []s
 				}
 			}
 			entity.List = append(entity.List[:DeleteFlag], entity.List[DeleteFlag:]...)
-			ct.Unlock()
+			//ct.Unlock()
 			log.Debug("Group entity update: %s delete", updatelist[0])
 		}
 		break
 	}
+	ct.Unlock()
 	return nil
 }
 
