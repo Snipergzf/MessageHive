@@ -39,7 +39,7 @@ const (
 	MESSAGE_GROUP_LEAVE  = "leave"
 )
 
-//群成员操作类型定义
+//群成员操作类型定义，用于调用onlinetable.UpdateGroupEntity函数时传递参数
 const (
 	ADD_GROUP_MEMBER = "add"
 	DEL_GROUP_MEMBER = "delete"
@@ -116,6 +116,7 @@ func Handler(config Config) error {
 			sendResponseFlag := true
 			sendResToGrpFlag := false
 			InviteToGrpFlag := false
+			DelFromGrpFlag := false
 			sid := msg.GetSID()
 			rid := msg.GetRID()
 			mtype := msg.GetTYPE()
@@ -182,15 +183,22 @@ func Handler(config Config) error {
 							break
 						case MESSAGE_GROUP_INVITE:
 							// TODO
-							err = config.onlinetable.UpdateGroupEntity(rid, ADD_GROUP_MEMBER, groupbody.List)
+							err := config.onlinetable.UpdateGroupEntity(rid, ADD_GROUP_MEMBER, groupbody.List)
 							if err != nil {
 								log.Error(err.Error())
 							}
 							sendflag = false
 							InviteToGrpFlag = true
 							break
+						//删除群组成员
 						case MESSAGE_GROUP_LEAVE:
 							// TODO
+							err := config.onlinetable.UpdateGroupEntity(rid, DEL_GROUP_MEMBER, groupbody.List)
+							if err != nil {
+								log.Error(err.Error())
+							}
+							sendflag = false
+							DelFromGrpFlag = true
 							break
 						}
 						break
@@ -198,13 +206,17 @@ func Handler(config Config) error {
 				}
 			}
 			// 发送回应消息
-			go func(flag1 bool, falg2 bool, flag3 bool) {
+			go func(flag1 bool, falg2 bool, flag3 bool, falg4 bool) {
 				//若为群组消息，改response的BODY
 				if sendResToGrpFlag {
 					response.BODY = proto.String(`{"action":"join","data":"succeed"}`)
 				}
 				if InviteToGrpFlag {
 					response.BODY = proto.String(`{"action":"invite","data":"succeed"}`)
+				}
+				//删除群组成员
+				if DelFromGrpFlag {
+					response.BODY = proto.String(`{"action":"leave","data":"succeed"}`)
 				}
 				if sendResponseFlag {
 					select {
@@ -214,7 +226,7 @@ func Handler(config Config) error {
 						log.Error("Response failed to deliverd to %s", sid)
 					}
 				}
-			}(sendResToGrpFlag, InviteToGrpFlag, sendResponseFlag)
+			}(sendResToGrpFlag, InviteToGrpFlag, sendResponseFlag, DelFromGrpFlag)
 
 			// Send to rid
 			if sendflag {
