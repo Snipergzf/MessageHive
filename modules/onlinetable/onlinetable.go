@@ -150,7 +150,7 @@ func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []s
 					DeleteFlag = i
 				}
 			}
-			entity.List = append(entity.List[:DeleteFlag], entity.List[DeleteFlag:]...)
+			entity.List = append(entity.List[:DeleteFlag], entity.List[DeleteFlag+1:]...)
 			str := strings.Join(entity.List, ";")
 			db, err := sql.Open("mysql", "dhc:denghc@/Register")
 			if err != nil {
