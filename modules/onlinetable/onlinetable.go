@@ -145,7 +145,7 @@ func (ct *Container) UpdateGroupEntity(uid string, action string, updatelist []s
 		ct.Lock()
 		var DeleteFlag int
 		if entity, ok := ct.storage[uid]; ok {
-			for i := 0; i <= len(entity.List); i++ {
+			for i := 0; i < len(entity.List); i++ {
 				if strings.EqualFold(entity.List[i], updatelist[0]) {
 					DeleteFlag = i
 				}
