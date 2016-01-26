@@ -4,15 +4,14 @@ package dbhelper
 
 import (
 	"database/sql"
-	"errors"
 	"strings"
-	"sync"
-	"time"
 
 	"github.com/Snipergzf/MessageHive/modules/onlinetable"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/op/go-logging"
 )
+
+var log = logging.MustGetLogger("main")
 
 func InsertGroupEntity() error {
 	db, err := sql.Open("mysql", "dhc:denghc@/Register")
