@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/Snipergzf/MessageHive/modules/auth"
+	"github.com/Snipergzf/MessageHive/modules/dbhelper"
 	"github.com/Snipergzf/MessageHive/modules/log"
 	"github.com/Snipergzf/MessageHive/modules/message"
 	"github.com/Snipergzf/MessageHive/modules/onlinetable"
@@ -51,7 +52,7 @@ func serve(cmd *cobra.Command, args []string) {
 
 	onlineTable := onlinetable.NewContainer()       // 在线表初始化
 	mainChan := make(chan *message.Container, 1024) // 主内部消息队列
-
+	dbhelper.InsertGroupEntity()                    //初始化在线群组信息
 	serverAddress := []string{serverInterface, fmt.Sprintf("%d", serverPort)}
 	serverConfig := server.NewConfig(strings.Join(serverAddress, ":"), mainChan, onlineTable)
 	go func() {

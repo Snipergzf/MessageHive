@@ -169,7 +169,7 @@ func Handler(config Config) error {
 						case MESSAGE_GROUP_JOIN:
 							_, err := config.onlinetable.GetEntity(rid)
 							if err != nil {
-								err = config.onlinetable.AddGroupEntity(rid, groupbody.List)
+								err = config.onlinetable.AddGroupEntity(rid, groupbody.List, true)
 								if err != nil {
 									log.Error(err.Error())
 								}
@@ -235,7 +235,7 @@ func Handler(config Config) error {
 					log.Debug(err.Error())
 					if hasBit(mtype, MESSAGE_TYPE_TRANSIENT) {
 						// MESSAGE_TYPE_TRANSIENT
-						// 向Transient队列压入消息
+						// 非暂态的消息向Transient队列压入消息
 						msg.TYPE = proto.Uint32(setBit(mtype, MESSAGE_INTERN_TYPE_TRANSIENT))
 						transientChan <- msg
 					}

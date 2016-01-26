@@ -77,31 +77,35 @@ func (ct *Container) AddEntity(uid string, pipe chan *message.Container) error {
 }
 
 // 向在线表中添加群组实体
-func (ct *Container) AddGroupEntity(uid string, uidlist []string) error {
+//add insertFlag argument to decide whether to insert group info into db --author:gzf
+func (ct *Container) AddGroupEntity(uid string, uidlist []string, insertFlag bool) error {
 	//TODO: Ensure every user in group is existed
 	ct.Lock()
+	delete(ct.storage, uid)
 	entity := &Entity{Uid: uid, Type: ENTITY_TYPE_GROUP, List: uidlist, LoginTime: time.Now().UTC()}
 	ct.storage[uid] = entity
-	str := strings.Join(uidlist, ";")
-	db, err := sql.Open("mysql", "dhc:denghc@/Register")
-	if err != nil {
-		return err
-	}
-	defer db.Close()
+	if insertFlag {
+		str := strings.Join(uidlist, ";")
+		db, err := sql.Open("mysql", "dhc:denghc@/Register")
+		if err != nil {
+			return err
+		}
+		defer db.Close()
 
-	err = db.Ping()
-	if err != nil {
-		return err
-	}
-	stmtIns, err := db.Prepare("INSERT INTO groups (id,group_id,group_member) VALUES (null,?,?)")
-	if err != nil {
-		return err
-	}
-	defer stmtIns.Close()
+		err = db.Ping()
+		if err != nil {
+			return err
+		}
+		stmtIns, err := db.Prepare("INSERT INTO groups (id,group_id,group_member) VALUES (null,?,?)")
+		if err != nil {
+			return err
+		}
+		defer stmtIns.Close()
 
-	_, err = stmtIns.Exec(uid, str)
-	if err != nil {
-		return err
+		_, err = stmtIns.Exec(uid, str)
+		if err != nil {
+			return err
+		}
 	}
 	ct.Unlock()
 	log.Debug("Group entity uid: %s added", uid)
