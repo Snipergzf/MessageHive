@@ -13,7 +13,17 @@ import (
 
 var log = logging.MustGetLogger("main")
 
-func InsertGroupEntity() error {
+type Config struct {
+	onlinetable *onlinetable.Container
+}
+
+func NewConfig(onlinetable *onlinetable.Container) Config {
+	return Config{
+		onlinetable: onlinetable,
+	}
+}
+
+func InsertGroupEntity(config Config) error {
 	db, err := sql.Open("mysql", "dhc:denghc@/Register")
 	if err != nil {
 		return err
@@ -38,7 +48,7 @@ func InsertGroupEntity() error {
 		if err != nil {
 			return err
 		}
-		onlinetable.AddGroupEntity(group_id, strings.Split(group_member, ";"), false)
+		config.onlinetable.AddGroupEntity(group_id, strings.Split(group_member, ";"), false)
 		log.Debug("Group entity group_id: %s added", group_id)
 	}
 	return nil
